@@ -10,13 +10,13 @@ module DrawIt
 
 {- | -}
 
-import Array exposing (Array, repeat)
+import Array exposing (Array, repeat, foldr)
 import Html exposing (..)
 import Html.Attributes as A
 
 
 type alias Model =
-    { image : Image
+    { board : Board
     }
 
 
@@ -24,18 +24,18 @@ type Msg
     = NoOp
 
 
-type Image
-    = Image (Array (Array Int))
+type Board
+    = Board (Array (Array Bool))
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( { image = blankImage dimensions }, Cmd.none )
+    ( { board = emptyBoard dimensions }, Cmd.none )
 
 
 view : Model -> Html Msg
 view model =
-    viewBoard model
+    renderBoard model.board
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -48,30 +48,44 @@ subscriptions model =
     Sub.none
 
 
-viewBoard : Model -> Html Msg
-viewBoard model =
-    table [ A.class "board" ]
-        [ tr []
-            [ td [ A.class "square active" ] []
-            , td [ A.class "square" ] []
-            ]
-        , tr []
-            [ td [ A.class "square" ] []
-            , td [ A.class "square" ] []
-            ]
-        ]
+renderBoard : Board -> Html Msg
+renderBoard (Board rows) =
+    table [ A.class "board" ] <| transformIndex renderRow rows
 
 
-renderImage : Image -> Html Msg
-renderImage (Image rows) =
-    table [] []
+renderRow : Int -> Array Bool -> Html Msg
+renderRow row values =
+    tr [] <| transformIndex (renderSquare row) values
 
 
-blankImage : Int -> Image
-blankImage dim =
-    Image <| repeat dim (repeat dim 0)
+renderSquare : Int -> Int -> Bool -> Html Msg
+renderSquare row col active =
+    if active then
+        td [ A.class "square active" ] []
+    else
+        td [ A.class "square" ] []
+
+
+transformIndex : (Int -> a -> b) -> Array a -> List b
+transformIndex transform input =
+    goTransform transform input (Array.length input - 1) []
+
+
+goTransform : (Int -> a -> b) -> Array a -> Int -> List b -> List b
+goTransform g input index acc =
+    case Array.get index input of
+        Just elem ->
+            goTransform g input (index - 1) (g index elem :: acc)
+
+        Nothing ->
+            acc
+
+
+emptyBoard : Int -> Board
+emptyBoard dim =
+    Board <| repeat dim (repeat dim False)
 
 
 dimensions : Int
 dimensions =
-    3
+    27

@@ -8141,15 +8141,70 @@ var _elm_lang$html$Html_Attributes$classList = function (list) {
 };
 var _elm_lang$html$Html_Attributes$style = _elm_lang$virtual_dom$VirtualDom$style;
 
-var _kosmoskatten$draw_it$DrawIt$dimensions = 3;
-var _kosmoskatten$draw_it$DrawIt$renderImage = function (_p0) {
-	var _p1 = _p0;
-	return A2(
-		_elm_lang$html$Html$table,
-		{ctor: '[]'},
-		{ctor: '[]'});
-};
-var _kosmoskatten$draw_it$DrawIt$viewBoard = function (model) {
+var _kosmoskatten$draw_it$DrawIt$dimensions = 27;
+var _kosmoskatten$draw_it$DrawIt$goTransform = F4(
+	function (g, input, index, acc) {
+		goTransform:
+		while (true) {
+			var _p0 = A2(_elm_lang$core$Array$get, index, input);
+			if (_p0.ctor === 'Just') {
+				var _v1 = g,
+					_v2 = input,
+					_v3 = index - 1,
+					_v4 = {
+					ctor: '::',
+					_0: A2(g, index, _p0._0),
+					_1: acc
+				};
+				g = _v1;
+				input = _v2;
+				index = _v3;
+				acc = _v4;
+				continue goTransform;
+			} else {
+				return acc;
+			}
+		}
+	});
+var _kosmoskatten$draw_it$DrawIt$transformIndex = F2(
+	function (transform, input) {
+		return A4(
+			_kosmoskatten$draw_it$DrawIt$goTransform,
+			transform,
+			input,
+			_elm_lang$core$Array$length(input) - 1,
+			{ctor: '[]'});
+	});
+var _kosmoskatten$draw_it$DrawIt$renderSquare = F3(
+	function (row, col, active) {
+		return active ? A2(
+			_elm_lang$html$Html$td,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('square active'),
+				_1: {ctor: '[]'}
+			},
+			{ctor: '[]'}) : A2(
+			_elm_lang$html$Html$td,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('square'),
+				_1: {ctor: '[]'}
+			},
+			{ctor: '[]'});
+	});
+var _kosmoskatten$draw_it$DrawIt$renderRow = F2(
+	function (row, values) {
+		return A2(
+			_elm_lang$html$Html$tr,
+			{ctor: '[]'},
+			A2(
+				_kosmoskatten$draw_it$DrawIt$transformIndex,
+				_kosmoskatten$draw_it$DrawIt$renderSquare(row),
+				values));
+	});
+var _kosmoskatten$draw_it$DrawIt$renderBoard = function (_p1) {
+	var _p2 = _p1;
 	return A2(
 		_elm_lang$html$Html$table,
 		{
@@ -8157,65 +8212,7 @@ var _kosmoskatten$draw_it$DrawIt$viewBoard = function (model) {
 			_0: _elm_lang$html$Html_Attributes$class('board'),
 			_1: {ctor: '[]'}
 		},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$tr,
-				{ctor: '[]'},
-				{
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$td,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('square active'),
-							_1: {ctor: '[]'}
-						},
-						{ctor: '[]'}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$td,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('square'),
-								_1: {ctor: '[]'}
-							},
-							{ctor: '[]'}),
-						_1: {ctor: '[]'}
-					}
-				}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$tr,
-					{ctor: '[]'},
-					{
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$td,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('square'),
-								_1: {ctor: '[]'}
-							},
-							{ctor: '[]'}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$td,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('square'),
-									_1: {ctor: '[]'}
-								},
-								{ctor: '[]'}),
-							_1: {ctor: '[]'}
-						}
-					}),
-				_1: {ctor: '[]'}
-			}
-		});
+		A2(_kosmoskatten$draw_it$DrawIt$transformIndex, _kosmoskatten$draw_it$DrawIt$renderRow, _p2._0));
 };
 var _kosmoskatten$draw_it$DrawIt$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$none;
@@ -8225,26 +8222,26 @@ var _kosmoskatten$draw_it$DrawIt$update = F2(
 		return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 	});
 var _kosmoskatten$draw_it$DrawIt$view = function (model) {
-	return _kosmoskatten$draw_it$DrawIt$viewBoard(model);
+	return _kosmoskatten$draw_it$DrawIt$renderBoard(model.board);
 };
 var _kosmoskatten$draw_it$DrawIt$Model = function (a) {
-	return {image: a};
+	return {board: a};
 };
 var _kosmoskatten$draw_it$DrawIt$NoOp = {ctor: 'NoOp'};
-var _kosmoskatten$draw_it$DrawIt$Image = function (a) {
-	return {ctor: 'Image', _0: a};
+var _kosmoskatten$draw_it$DrawIt$Board = function (a) {
+	return {ctor: 'Board', _0: a};
 };
-var _kosmoskatten$draw_it$DrawIt$blankImage = function (dim) {
-	return _kosmoskatten$draw_it$DrawIt$Image(
+var _kosmoskatten$draw_it$DrawIt$emptyBoard = function (dim) {
+	return _kosmoskatten$draw_it$DrawIt$Board(
 		A2(
 			_elm_lang$core$Array$repeat,
 			dim,
-			A2(_elm_lang$core$Array$repeat, dim, 0)));
+			A2(_elm_lang$core$Array$repeat, dim, false)));
 };
 var _kosmoskatten$draw_it$DrawIt$init = {
 	ctor: '_Tuple2',
 	_0: {
-		image: _kosmoskatten$draw_it$DrawIt$blankImage(_kosmoskatten$draw_it$DrawIt$dimensions)
+		board: _kosmoskatten$draw_it$DrawIt$emptyBoard(_kosmoskatten$draw_it$DrawIt$dimensions)
 	},
 	_1: _elm_lang$core$Platform_Cmd$none
 };

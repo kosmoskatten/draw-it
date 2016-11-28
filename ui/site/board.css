@@ -1,13 +1,17 @@
 .board {
-  width:400px;
-  height:400px;
-  border:1px solid black;
+  width: 400px;
+  height: 400px;
+  border: 1px solid black;
+  /*border-spacing: 0px;*/
+  border-collapse: collapse;
 }
 
 .square {
-  border:1px solid black;
+  border: none;
+  background-color: white;
 }
 
 .active {
-  background-color:blue;
+  border: none;
+  background-color: blue;
 }
