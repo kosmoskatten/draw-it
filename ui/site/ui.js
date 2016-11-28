@@ -8141,6 +8141,121 @@ var _elm_lang$html$Html_Attributes$classList = function (list) {
 };
 var _elm_lang$html$Html_Attributes$style = _elm_lang$virtual_dom$VirtualDom$style;
 
+var _elm_lang$html$Html_Events$keyCode = A2(_elm_lang$core$Json_Decode$field, 'keyCode', _elm_lang$core$Json_Decode$int);
+var _elm_lang$html$Html_Events$targetChecked = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'target',
+		_1: {
+			ctor: '::',
+			_0: 'checked',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$bool);
+var _elm_lang$html$Html_Events$targetValue = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'target',
+		_1: {
+			ctor: '::',
+			_0: 'value',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$string);
+var _elm_lang$html$Html_Events$defaultOptions = _elm_lang$virtual_dom$VirtualDom$defaultOptions;
+var _elm_lang$html$Html_Events$onWithOptions = _elm_lang$virtual_dom$VirtualDom$onWithOptions;
+var _elm_lang$html$Html_Events$on = _elm_lang$virtual_dom$VirtualDom$on;
+var _elm_lang$html$Html_Events$onFocus = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'focus',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onBlur = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'blur',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onSubmitOptions = _elm_lang$core$Native_Utils.update(
+	_elm_lang$html$Html_Events$defaultOptions,
+	{preventDefault: true});
+var _elm_lang$html$Html_Events$onSubmit = function (msg) {
+	return A3(
+		_elm_lang$html$Html_Events$onWithOptions,
+		'submit',
+		_elm_lang$html$Html_Events$onSubmitOptions,
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onCheck = function (tagger) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'change',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetChecked));
+};
+var _elm_lang$html$Html_Events$onInput = function (tagger) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'input',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetValue));
+};
+var _elm_lang$html$Html_Events$onMouseOut = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseout',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseOver = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseover',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseLeave = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseleave',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseEnter = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseenter',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseUp = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseup',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseDown = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mousedown',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onDoubleClick = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'dblclick',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onClick = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'click',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$Options = F2(
+	function (a, b) {
+		return {stopPropagation: a, preventDefault: b};
+	});
+
 var _kosmoskatten$draw_it$DrawIt$dimensions = 27;
 var _kosmoskatten$draw_it$DrawIt$goTransform = F4(
 	function (g, input, index, acc) {
@@ -8175,6 +8290,20 @@ var _kosmoskatten$draw_it$DrawIt$transformIndex = F2(
 			_elm_lang$core$Array$length(input) - 1,
 			{ctor: '[]'});
 	});
+var _kosmoskatten$draw_it$DrawIt$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$none;
+};
+var _kosmoskatten$draw_it$DrawIt$Model = F2(
+	function (a, b) {
+		return {board: a, mouseMode: b};
+	});
+var _kosmoskatten$draw_it$DrawIt$NoOp = {ctor: 'NoOp'};
+var _kosmoskatten$draw_it$DrawIt$MouseUp = {ctor: 'MouseUp'};
+var _kosmoskatten$draw_it$DrawIt$ClickActiveSquare = {ctor: 'ClickActiveSquare'};
+var _kosmoskatten$draw_it$DrawIt$ClickInactiveSquare = F2(
+	function (a, b) {
+		return {ctor: 'ClickInactiveSquare', _0: a, _1: b};
+	});
 var _kosmoskatten$draw_it$DrawIt$renderSquare = F3(
 	function (row, col, active) {
 		return active ? A2(
@@ -8182,14 +8311,23 @@ var _kosmoskatten$draw_it$DrawIt$renderSquare = F3(
 			{
 				ctor: '::',
 				_0: _elm_lang$html$Html_Attributes$class('square active'),
-				_1: {ctor: '[]'}
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onClick(_kosmoskatten$draw_it$DrawIt$ClickActiveSquare),
+					_1: {ctor: '[]'}
+				}
 			},
 			{ctor: '[]'}) : A2(
 			_elm_lang$html$Html$td,
 			{
 				ctor: '::',
 				_0: _elm_lang$html$Html_Attributes$class('square'),
-				_1: {ctor: '[]'}
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onClick(
+						A2(_kosmoskatten$draw_it$DrawIt$ClickInactiveSquare, row, col)),
+					_1: {ctor: '[]'}
+				}
 			},
 			{ctor: '[]'});
 	});
@@ -8214,23 +8352,25 @@ var _kosmoskatten$draw_it$DrawIt$renderBoard = function (_p1) {
 		},
 		A2(_kosmoskatten$draw_it$DrawIt$transformIndex, _kosmoskatten$draw_it$DrawIt$renderRow, _p2._0));
 };
-var _kosmoskatten$draw_it$DrawIt$subscriptions = function (model) {
-	return _elm_lang$core$Platform_Sub$none;
-};
-var _kosmoskatten$draw_it$DrawIt$update = F2(
-	function (msg, model) {
-		return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
-	});
-var _kosmoskatten$draw_it$DrawIt$view = function (model) {
-	return _kosmoskatten$draw_it$DrawIt$renderBoard(model.board);
-};
-var _kosmoskatten$draw_it$DrawIt$Model = function (a) {
-	return {board: a};
-};
-var _kosmoskatten$draw_it$DrawIt$NoOp = {ctor: 'NoOp'};
 var _kosmoskatten$draw_it$DrawIt$Board = function (a) {
 	return {ctor: 'Board', _0: a};
 };
+var _kosmoskatten$draw_it$DrawIt$activateSquare = F3(
+	function (_p3, row, col) {
+		var _p4 = _p3;
+		var _p6 = _p4._0;
+		var _p5 = A2(_elm_lang$core$Array$get, row, _p6);
+		if (_p5.ctor === 'Just') {
+			return _kosmoskatten$draw_it$DrawIt$Board(
+				A3(
+					_elm_lang$core$Array$set,
+					row,
+					A3(_elm_lang$core$Array$set, col, true, _p5._0),
+					_p6));
+		} else {
+			return _kosmoskatten$draw_it$DrawIt$Board(_p6);
+		}
+	});
 var _kosmoskatten$draw_it$DrawIt$emptyBoard = function (dim) {
 	return _kosmoskatten$draw_it$DrawIt$Board(
 		A2(
@@ -8238,13 +8378,66 @@ var _kosmoskatten$draw_it$DrawIt$emptyBoard = function (dim) {
 			dim,
 			A2(_elm_lang$core$Array$repeat, dim, false)));
 };
+var _kosmoskatten$draw_it$DrawIt$InactiveInBoard = {ctor: 'InactiveInBoard'};
 var _kosmoskatten$draw_it$DrawIt$init = {
 	ctor: '_Tuple2',
 	_0: {
-		board: _kosmoskatten$draw_it$DrawIt$emptyBoard(_kosmoskatten$draw_it$DrawIt$dimensions)
+		board: _kosmoskatten$draw_it$DrawIt$emptyBoard(_kosmoskatten$draw_it$DrawIt$dimensions),
+		mouseMode: _kosmoskatten$draw_it$DrawIt$InactiveInBoard
 	},
 	_1: _elm_lang$core$Platform_Cmd$none
 };
+var _kosmoskatten$draw_it$DrawIt$ActiveInBoard = {ctor: 'ActiveInBoard'};
+var _kosmoskatten$draw_it$DrawIt$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _kosmoskatten$draw_it$DrawIt$renderBoard(model.board),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(
+					_elm_lang$core$Native_Utils.eq(model.mouseMode, _kosmoskatten$draw_it$DrawIt$ActiveInBoard) ? 'Mouse: Active' : 'Mouse: Inactive'),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _kosmoskatten$draw_it$DrawIt$update = F2(
+	function (msg, model) {
+		var _p7 = msg;
+		switch (_p7.ctor) {
+			case 'ClickInactiveSquare':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							board: A3(_kosmoskatten$draw_it$DrawIt$activateSquare, model.board, _p7._0, _p7._1),
+							mouseMode: _kosmoskatten$draw_it$DrawIt$ActiveInBoard
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'ClickActiveSquare':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{mouseMode: _kosmoskatten$draw_it$DrawIt$ActiveInBoard}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'MouseUp':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{mouseMode: _kosmoskatten$draw_it$DrawIt$InactiveInBoard}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+		}
+	});
 
 var _kosmoskatten$draw_it$Main$main = _elm_lang$html$Html$program(
 	{init: _kosmoskatten$draw_it$DrawIt$init, view: _kosmoskatten$draw_it$DrawIt$view, update: _kosmoskatten$draw_it$DrawIt$update, subscriptions: _kosmoskatten$draw_it$DrawIt$subscriptions})();

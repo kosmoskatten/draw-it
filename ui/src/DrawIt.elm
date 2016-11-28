@@ -10,37 +10,74 @@ module DrawIt
 
 {- | -}
 
-import Array exposing (Array, repeat, foldr)
+import Array exposing (Array, repeat)
 import Html exposing (..)
 import Html.Attributes as A
+import Html.Events as E
 
 
 type alias Model =
     { board : Board
+    , mouseMode : MouseMode
     }
 
 
 type Msg
-    = NoOp
+    = ClickInactiveSquare Int Int
+    | ClickActiveSquare
+    | MouseUp
+    | NoOp
 
 
 type Board
     = Board (Array (Array Bool))
 
 
+type MouseMode
+    = ActiveInBoard
+    | InactiveInBoard
+
+
 init : ( Model, Cmd Msg )
 init =
-    ( { board = emptyBoard dimensions }, Cmd.none )
+    ( { board = emptyBoard dimensions
+      , mouseMode = InactiveInBoard
+      }
+    , Cmd.none
+    )
 
 
 view : Model -> Html Msg
 view model =
-    renderBoard model.board
+    div []
+        [ renderBoard model.board
+        , text <|
+            if model.mouseMode == ActiveInBoard then
+                "Mouse: Active"
+            else
+                "Mouse: Inactive"
+        ]
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of
+        ClickInactiveSquare row col ->
+            ( { model
+                | board = activateSquare model.board row col
+                , mouseMode = ActiveInBoard
+              }
+            , Cmd.none
+            )
+
+        ClickActiveSquare ->
+            ( { model | mouseMode = ActiveInBoard }, Cmd.none )
+
+        MouseUp ->
+            ( { model | mouseMode = InactiveInBoard }, Cmd.none )
+
+        NoOp ->
+            ( model, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
@@ -61,9 +98,9 @@ renderRow row values =
 renderSquare : Int -> Int -> Bool -> Html Msg
 renderSquare row col active =
     if active then
-        td [ A.class "square active" ] []
+        td [ A.class "square active", E.onClick ClickActiveSquare ] []
     else
-        td [ A.class "square" ] []
+        td [ A.class "square", E.onClick <| ClickInactiveSquare row col ] []
 
 
 transformIndex : (Int -> a -> b) -> Array a -> List b
@@ -79,6 +116,16 @@ goTransform g input index acc =
 
         Nothing ->
             acc
+
+
+activateSquare : Board -> Int -> Int -> Board
+activateSquare (Board board) row col =
+    case Array.get row board of
+        Just oldRow ->
+            Board <| Array.set row (Array.set col True oldRow) board
+
+        Nothing ->
+            Board board
 
 
 emptyBoard : Int -> Board
