@@ -10,12 +10,13 @@ module DrawIt
 
 {- | -}
 
+import Array exposing (Array, repeat)
 import Html exposing (..)
 import Html.Attributes as A
 
 
 type alias Model =
-    { foo : Int
+    { image : Image
     }
 
 
@@ -23,9 +24,13 @@ type Msg
     = NoOp
 
 
+type Image
+    = Image (Array (Array Int))
+
+
 init : ( Model, Cmd Msg )
 init =
-    ( { foo = 0 }, Cmd.none )
+    ( { image = blankImage dimensions }, Cmd.none )
 
 
 view : Model -> Html Msg
@@ -55,3 +60,18 @@ viewBoard model =
             , td [ A.class "square" ] []
             ]
         ]
+
+
+renderImage : Image -> Html Msg
+renderImage (Image rows) =
+    table [] []
+
+
+blankImage : Int -> Image
+blankImage dim =
+    Image <| repeat dim (repeat dim 0)
+
+
+dimensions : Int
+dimensions =
+    3
