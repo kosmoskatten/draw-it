@@ -8257,24 +8257,37 @@ var _elm_lang$html$Html_Events$Options = F2(
 	});
 
 var _kosmoskatten$draw_it$DrawIt$dimensions = 27;
+var _kosmoskatten$draw_it$DrawIt$isActive = F3(
+	function (_p0, row, col) {
+		var _p1 = _p0;
+		var _p2 = A2(_elm_lang$core$Array$get, row, _p1._0);
+		if (_p2.ctor === 'Just') {
+			return A2(
+				_elm_lang$core$Maybe$withDefault,
+				false,
+				A2(_elm_lang$core$Array$get, col, _p2._0));
+		} else {
+			return false;
+		}
+	});
 var _kosmoskatten$draw_it$DrawIt$goTransform = F4(
 	function (g, input, index, acc) {
 		goTransform:
 		while (true) {
-			var _p0 = A2(_elm_lang$core$Array$get, index, input);
-			if (_p0.ctor === 'Just') {
-				var _v1 = g,
-					_v2 = input,
-					_v3 = index - 1,
-					_v4 = {
+			var _p3 = A2(_elm_lang$core$Array$get, index, input);
+			if (_p3.ctor === 'Just') {
+				var _v3 = g,
+					_v4 = input,
+					_v5 = index - 1,
+					_v6 = {
 					ctor: '::',
-					_0: A2(g, index, _p0._0),
+					_0: A2(g, index, _p3._0),
 					_1: acc
 				};
-				g = _v1;
-				input = _v2;
-				index = _v3;
-				acc = _v4;
+				g = _v3;
+				input = _v4;
+				index = _v5;
+				acc = _v6;
 				continue goTransform;
 			} else {
 				return acc;
@@ -8299,10 +8312,9 @@ var _kosmoskatten$draw_it$DrawIt$Model = F2(
 	});
 var _kosmoskatten$draw_it$DrawIt$NoOp = {ctor: 'NoOp'};
 var _kosmoskatten$draw_it$DrawIt$MouseUp = {ctor: 'MouseUp'};
-var _kosmoskatten$draw_it$DrawIt$ClickActiveSquare = {ctor: 'ClickActiveSquare'};
-var _kosmoskatten$draw_it$DrawIt$ClickInactiveSquare = F2(
+var _kosmoskatten$draw_it$DrawIt$MouseDownOn = F2(
 	function (a, b) {
-		return {ctor: 'ClickInactiveSquare', _0: a, _1: b};
+		return {ctor: 'MouseDownOn', _0: a, _1: b};
 	});
 var _kosmoskatten$draw_it$DrawIt$renderSquare = F3(
 	function (row, col, active) {
@@ -8313,7 +8325,8 @@ var _kosmoskatten$draw_it$DrawIt$renderSquare = F3(
 				_0: _elm_lang$html$Html_Attributes$class('square active'),
 				_1: {
 					ctor: '::',
-					_0: _elm_lang$html$Html_Events$onClick(_kosmoskatten$draw_it$DrawIt$ClickActiveSquare),
+					_0: _elm_lang$html$Html_Events$onMouseDown(
+						A2(_kosmoskatten$draw_it$DrawIt$MouseDownOn, row, col)),
 					_1: {ctor: '[]'}
 				}
 			},
@@ -8324,8 +8337,8 @@ var _kosmoskatten$draw_it$DrawIt$renderSquare = F3(
 				_0: _elm_lang$html$Html_Attributes$class('square'),
 				_1: {
 					ctor: '::',
-					_0: _elm_lang$html$Html_Events$onClick(
-						A2(_kosmoskatten$draw_it$DrawIt$ClickInactiveSquare, row, col)),
+					_0: _elm_lang$html$Html_Events$onMouseDown(
+						A2(_kosmoskatten$draw_it$DrawIt$MouseDownOn, row, col)),
 					_1: {ctor: '[]'}
 				}
 			},
@@ -8341,8 +8354,8 @@ var _kosmoskatten$draw_it$DrawIt$renderRow = F2(
 				_kosmoskatten$draw_it$DrawIt$renderSquare(row),
 				values));
 	});
-var _kosmoskatten$draw_it$DrawIt$renderBoard = function (_p1) {
-	var _p2 = _p1;
+var _kosmoskatten$draw_it$DrawIt$renderBoard = function (_p4) {
+	var _p5 = _p4;
 	return A2(
 		_elm_lang$html$Html$table,
 		{
@@ -8350,25 +8363,25 @@ var _kosmoskatten$draw_it$DrawIt$renderBoard = function (_p1) {
 			_0: _elm_lang$html$Html_Attributes$class('board'),
 			_1: {ctor: '[]'}
 		},
-		A2(_kosmoskatten$draw_it$DrawIt$transformIndex, _kosmoskatten$draw_it$DrawIt$renderRow, _p2._0));
+		A2(_kosmoskatten$draw_it$DrawIt$transformIndex, _kosmoskatten$draw_it$DrawIt$renderRow, _p5._0));
 };
 var _kosmoskatten$draw_it$DrawIt$Board = function (a) {
 	return {ctor: 'Board', _0: a};
 };
 var _kosmoskatten$draw_it$DrawIt$activateSquare = F3(
-	function (_p3, row, col) {
-		var _p4 = _p3;
-		var _p6 = _p4._0;
-		var _p5 = A2(_elm_lang$core$Array$get, row, _p6);
-		if (_p5.ctor === 'Just') {
+	function (_p6, row, col) {
+		var _p7 = _p6;
+		var _p9 = _p7._0;
+		var _p8 = A2(_elm_lang$core$Array$get, row, _p9);
+		if (_p8.ctor === 'Just') {
 			return _kosmoskatten$draw_it$DrawIt$Board(
 				A3(
 					_elm_lang$core$Array$set,
 					row,
-					A3(_elm_lang$core$Array$set, col, true, _p5._0),
-					_p6));
+					A3(_elm_lang$core$Array$set, col, true, _p8._0),
+					_p9));
 		} else {
-			return _kosmoskatten$draw_it$DrawIt$Board(_p6);
+			return _kosmoskatten$draw_it$DrawIt$Board(_p9);
 		}
 	});
 var _kosmoskatten$draw_it$DrawIt$emptyBoard = function (dim) {
@@ -8405,25 +8418,25 @@ var _kosmoskatten$draw_it$DrawIt$view = function (model) {
 };
 var _kosmoskatten$draw_it$DrawIt$update = F2(
 	function (msg, model) {
-		var _p7 = msg;
-		switch (_p7.ctor) {
-			case 'ClickInactiveSquare':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							board: A3(_kosmoskatten$draw_it$DrawIt$activateSquare, model.board, _p7._0, _p7._1),
-							mouseMode: _kosmoskatten$draw_it$DrawIt$ActiveInBoard
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'ClickActiveSquare':
-				return {
+		var _p10 = msg;
+		switch (_p10.ctor) {
+			case 'MouseDownOn':
+				var _p12 = _p10._0;
+				var _p11 = _p10._1;
+				return A3(_kosmoskatten$draw_it$DrawIt$isActive, model.board, _p12, _p11) ? {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{mouseMode: _kosmoskatten$draw_it$DrawIt$ActiveInBoard}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				} : {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							board: A3(_kosmoskatten$draw_it$DrawIt$activateSquare, model.board, _p12, _p11),
+							mouseMode: _kosmoskatten$draw_it$DrawIt$ActiveInBoard
+						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'MouseUp':

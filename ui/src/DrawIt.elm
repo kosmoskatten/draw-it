@@ -23,8 +23,7 @@ type alias Model =
 
 
 type Msg
-    = ClickInactiveSquare Int Int
-    | ClickActiveSquare
+    = MouseDownOn Int Int
     | MouseUp
     | NoOp
 
@@ -62,16 +61,16 @@ view model =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        ClickInactiveSquare row col ->
-            ( { model
-                | board = activateSquare model.board row col
-                , mouseMode = ActiveInBoard
-              }
-            , Cmd.none
-            )
-
-        ClickActiveSquare ->
-            ( { model | mouseMode = ActiveInBoard }, Cmd.none )
+        MouseDownOn row col ->
+            if isActive model.board row col then
+                ( { model | mouseMode = ActiveInBoard }, Cmd.none )
+            else
+                ( { model
+                    | board = activateSquare model.board row col
+                    , mouseMode = ActiveInBoard
+                  }
+                , Cmd.none
+                )
 
         MouseUp ->
             ( { model | mouseMode = InactiveInBoard }, Cmd.none )
@@ -98,9 +97,9 @@ renderRow row values =
 renderSquare : Int -> Int -> Bool -> Html Msg
 renderSquare row col active =
     if active then
-        td [ A.class "square active", E.onClick ClickActiveSquare ] []
+        td [ A.class "square active", E.onMouseDown <| MouseDownOn row col ] []
     else
-        td [ A.class "square", E.onClick <| ClickInactiveSquare row col ] []
+        td [ A.class "square", E.onMouseDown <| MouseDownOn row col ] []
 
 
 transformIndex : (Int -> a -> b) -> Array a -> List b
@@ -131,6 +130,16 @@ activateSquare (Board board) row col =
 emptyBoard : Int -> Board
 emptyBoard dim =
     Board <| repeat dim (repeat dim False)
+
+
+isActive : Board -> Int -> Int -> Bool
+isActive (Board rows) row col =
+    case Array.get row rows of
+        Just row_ ->
+            Maybe.withDefault False <| Array.get col row_
+
+        Nothing ->
+            False
 
 
 dimensions : Int
