@@ -8257,7 +8257,7 @@ var _elm_lang$html$Html_Events$Options = F2(
 	});
 
 var _kosmoskatten$draw_it$DrawIt$dimensions = 27;
-var _kosmoskatten$draw_it$DrawIt$isActive = F3(
+var _kosmoskatten$draw_it$DrawIt$isSet = F3(
 	function (_p0, row, col) {
 		var _p1 = _p0;
 		var _p2 = A2(_elm_lang$core$Array$get, row, _p1._0);
@@ -8317,8 +8317,8 @@ var _kosmoskatten$draw_it$DrawIt$MouseDownOn = F2(
 		return {ctor: 'MouseDownOn', _0: a, _1: b};
 	});
 var _kosmoskatten$draw_it$DrawIt$renderSquare = F3(
-	function (row, col, active) {
-		return active ? A2(
+	function (row, col, isSet) {
+		return isSet ? A2(
 			_elm_lang$html$Html$td,
 			{
 				ctor: '::',
@@ -8368,7 +8368,7 @@ var _kosmoskatten$draw_it$DrawIt$renderBoard = function (_p4) {
 var _kosmoskatten$draw_it$DrawIt$Board = function (a) {
 	return {ctor: 'Board', _0: a};
 };
-var _kosmoskatten$draw_it$DrawIt$activateSquare = F3(
+var _kosmoskatten$draw_it$DrawIt$setSquare = F3(
 	function (_p6, row, col) {
 		var _p7 = _p6;
 		var _p9 = _p7._0;
@@ -8391,16 +8391,16 @@ var _kosmoskatten$draw_it$DrawIt$emptyBoard = function (dim) {
 			dim,
 			A2(_elm_lang$core$Array$repeat, dim, false)));
 };
-var _kosmoskatten$draw_it$DrawIt$InactiveInBoard = {ctor: 'InactiveInBoard'};
+var _kosmoskatten$draw_it$DrawIt$Inactive = {ctor: 'Inactive'};
 var _kosmoskatten$draw_it$DrawIt$init = {
 	ctor: '_Tuple2',
 	_0: {
 		board: _kosmoskatten$draw_it$DrawIt$emptyBoard(_kosmoskatten$draw_it$DrawIt$dimensions),
-		mouseMode: _kosmoskatten$draw_it$DrawIt$InactiveInBoard
+		mouseMode: _kosmoskatten$draw_it$DrawIt$Inactive
 	},
 	_1: _elm_lang$core$Platform_Cmd$none
 };
-var _kosmoskatten$draw_it$DrawIt$ActiveInBoard = {ctor: 'ActiveInBoard'};
+var _kosmoskatten$draw_it$DrawIt$Active = {ctor: 'Active'};
 var _kosmoskatten$draw_it$DrawIt$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -8411,7 +8411,7 @@ var _kosmoskatten$draw_it$DrawIt$view = function (model) {
 			_1: {
 				ctor: '::',
 				_0: _elm_lang$html$Html$text(
-					_elm_lang$core$Native_Utils.eq(model.mouseMode, _kosmoskatten$draw_it$DrawIt$ActiveInBoard) ? 'Mouse: Active' : 'Mouse: Inactive'),
+					_elm_lang$core$Native_Utils.eq(model.mouseMode, _kosmoskatten$draw_it$DrawIt$Active) ? 'Mouse: Active' : 'Mouse: Inactive'),
 				_1: {ctor: '[]'}
 			}
 		});
@@ -8423,19 +8423,19 @@ var _kosmoskatten$draw_it$DrawIt$update = F2(
 			case 'MouseDownOn':
 				var _p12 = _p10._0;
 				var _p11 = _p10._1;
-				return A3(_kosmoskatten$draw_it$DrawIt$isActive, model.board, _p12, _p11) ? {
+				return A3(_kosmoskatten$draw_it$DrawIt$isSet, model.board, _p12, _p11) ? {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{mouseMode: _kosmoskatten$draw_it$DrawIt$ActiveInBoard}),
+						{mouseMode: _kosmoskatten$draw_it$DrawIt$Active}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				} : {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							board: A3(_kosmoskatten$draw_it$DrawIt$activateSquare, model.board, _p12, _p11),
-							mouseMode: _kosmoskatten$draw_it$DrawIt$ActiveInBoard
+							board: A3(_kosmoskatten$draw_it$DrawIt$setSquare, model.board, _p12, _p11),
+							mouseMode: _kosmoskatten$draw_it$DrawIt$Active
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
@@ -8444,7 +8444,7 @@ var _kosmoskatten$draw_it$DrawIt$update = F2(
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{mouseMode: _kosmoskatten$draw_it$DrawIt$InactiveInBoard}),
+						{mouseMode: _kosmoskatten$draw_it$DrawIt$Inactive}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			default:

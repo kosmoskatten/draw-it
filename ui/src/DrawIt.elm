@@ -33,14 +33,14 @@ type Board
 
 
 type MouseMode
-    = ActiveInBoard
-    | InactiveInBoard
+    = Active
+    | Inactive
 
 
 init : ( Model, Cmd Msg )
 init =
     ( { board = emptyBoard dimensions
-      , mouseMode = InactiveInBoard
+      , mouseMode = Inactive
       }
     , Cmd.none
     )
@@ -51,7 +51,7 @@ view model =
     div []
         [ renderBoard model.board
         , text <|
-            if model.mouseMode == ActiveInBoard then
+            if model.mouseMode == Active then
                 "Mouse: Active"
             else
                 "Mouse: Inactive"
@@ -62,18 +62,18 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         MouseDownOn row col ->
-            if isActive model.board row col then
-                ( { model | mouseMode = ActiveInBoard }, Cmd.none )
+            if isSet model.board row col then
+                ( { model | mouseMode = Active }, Cmd.none )
             else
                 ( { model
-                    | board = activateSquare model.board row col
-                    , mouseMode = ActiveInBoard
+                    | board = setSquare model.board row col
+                    , mouseMode = Active
                   }
                 , Cmd.none
                 )
 
         MouseUp ->
-            ( { model | mouseMode = InactiveInBoard }, Cmd.none )
+            ( { model | mouseMode = Inactive }, Cmd.none )
 
         NoOp ->
             ( model, Cmd.none )
@@ -95,8 +95,8 @@ renderRow row values =
 
 
 renderSquare : Int -> Int -> Bool -> Html Msg
-renderSquare row col active =
-    if active then
+renderSquare row col isSet =
+    if isSet then
         td [ A.class "square active", E.onMouseDown <| MouseDownOn row col ] []
     else
         td [ A.class "square", E.onMouseDown <| MouseDownOn row col ] []
@@ -117,8 +117,8 @@ goTransform g input index acc =
             acc
 
 
-activateSquare : Board -> Int -> Int -> Board
-activateSquare (Board board) row col =
+setSquare : Board -> Int -> Int -> Board
+setSquare (Board board) row col =
     case Array.get row board of
         Just oldRow ->
             Board <| Array.set row (Array.set col True oldRow) board
@@ -132,8 +132,8 @@ emptyBoard dim =
     Board <| repeat dim (repeat dim False)
 
 
-isActive : Board -> Int -> Int -> Bool
-isActive (Board rows) row col =
+isSet : Board -> Int -> Int -> Bool
+isSet (Board rows) row col =
     case Array.get row rows of
         Just row_ ->
             Maybe.withDefault False <| Array.get col row_
