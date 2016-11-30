@@ -1,7 +1,8 @@
 module Main exposing (main)
 
 import Html exposing (program)
-import DrawIt exposing (Model, Msg, init, view, update, subscriptions)
+import DrawIt exposing (Model, init, view, update, subscriptions)
+import Types exposing (Msg)
 
 
 main : Program Never Model Msg

@@ -1,7 +1,6 @@
 module DrawIt
     exposing
         ( Model
-        , Msg
         , init
         , view
         , update
@@ -10,38 +9,21 @@ module DrawIt
 
 {- | -}
 
-import Array exposing (Array, repeat)
 import Html exposing (..)
-import Html.Attributes as A
-import Html.Events as E
 import Html.Lazy exposing (lazy)
+import Types exposing (Msg(..), MouseMode(..))
+import Image exposing (..)
 
 
 type alias Model =
-    { board : Board
+    { image : Image
     , mouseMode : MouseMode
     }
 
 
-type Msg
-    = MouseDown Int Int
-    | MouseEnter Int Int
-    | MouseUp
-    | NoOp
-
-
-type Board
-    = Board (Array (Array Bool))
-
-
-type MouseMode
-    = Active
-    | Inactive
-
-
 init : ( Model, Cmd Msg )
 init =
-    ( { board = emptyBoard dimensions
+    ( { image = blankImage dimensions
       , mouseMode = Inactive
       }
     , Cmd.none
@@ -51,7 +33,7 @@ init =
 view : Model -> Html Msg
 view model =
     div []
-        [ lazy renderBoard model.board
+        [ lazy renderImage model.image
         , text <|
             if model.mouseMode == Active then
                 "Mouse: Active"
@@ -64,19 +46,23 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         MouseDown row col ->
-            if isSet model.board row col then
+            if checkPixel model.image row col then
                 ( { model | mouseMode = Active }, Cmd.none )
             else
                 ( { model
-                    | board = setSquare model.board row col
+                    | image = setPixel model.image row col
                     , mouseMode = Active
                   }
                 , Cmd.none
                 )
 
         MouseEnter row col ->
-            if model.mouseMode == Active && not (isSet model.board row col) then
-                ( { model | board = setSquare model.board row col }, Cmd.none )
+            if
+                model.mouseMode
+                    == Active
+                    && not (checkPixel model.image row col)
+            then
+                ( { model | image = setPixel model.image row col }, Cmd.none )
             else
                 ( model, Cmd.none )
 
@@ -90,82 +76,3 @@ update msg model =
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.none
-
-
-renderBoard : Board -> Html Msg
-renderBoard (Board rows) =
-    table
-        [ A.class "board"
-        , E.onMouseUp MouseUp
-        , E.onMouseLeave MouseUp
-        ]
-    <|
-        transformIndex renderRow rows
-
-
-renderRow : Int -> Array Bool -> Html Msg
-renderRow row values =
-    tr [] <| transformIndex (renderSquare row) values
-
-
-renderSquare : Int -> Int -> Bool -> Html Msg
-renderSquare row col isSet =
-    if isSet then
-        td
-            [ A.class "square active"
-            , E.onMouseDown <| MouseDown row col
-            , E.onMouseEnter <| MouseEnter row col
-            ]
-            []
-    else
-        td
-            [ A.class "square"
-            , E.onMouseDown <| MouseDown row col
-            , E.onMouseEnter <| MouseEnter row col
-            ]
-            []
-
-
-transformIndex : (Int -> a -> b) -> Array a -> List b
-transformIndex transform input =
-    goTransform transform input (Array.length input - 1) []
-
-
-goTransform : (Int -> a -> b) -> Array a -> Int -> List b -> List b
-goTransform g input index acc =
-    case Array.get index input of
-        Just elem ->
-            goTransform g input (index - 1) (g index elem :: acc)
-
-        Nothing ->
-            acc
-
-
-setSquare : Board -> Int -> Int -> Board
-setSquare (Board board) row col =
-    case Array.get row board of
-        Just oldRow ->
-            Board <| Array.set row (Array.set col True oldRow) board
-
-        Nothing ->
-            Board board
-
-
-emptyBoard : Int -> Board
-emptyBoard dim =
-    Board <| repeat dim (repeat dim False)
-
-
-isSet : Board -> Int -> Int -> Bool
-isSet (Board rows) row col =
-    case Array.get row rows of
-        Just row_ ->
-            Maybe.withDefault False <| Array.get col row_
-
-        Nothing ->
-            False
-
-
-dimensions : Int
-dimensions =
-    20
