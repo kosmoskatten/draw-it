@@ -1,0 +1,17 @@
+.image {
+  width: 400px;
+  height: 400px;
+  border: 1px solid black;
+}
+
+.pixel {
+  border: none;
+}
+
+.set {
+  background-color: blue;
+}
+
+.unset {
+  background-color: white;
+}

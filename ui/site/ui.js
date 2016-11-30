@@ -8312,7 +8312,7 @@ var _kosmoskatten$draw_it$Image$renderPixel = F3(
 			_elm_lang$html$Html$td,
 			{
 				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$class('square active'),
+				_0: _elm_lang$html$Html_Attributes$class('pixel set'),
 				_1: {
 					ctor: '::',
 					_0: _elm_lang$html$Html_Events$onMouseDown(
@@ -8329,7 +8329,7 @@ var _kosmoskatten$draw_it$Image$renderPixel = F3(
 			_elm_lang$html$Html$td,
 			{
 				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$class('square'),
+				_0: _elm_lang$html$Html_Attributes$class('pixel unset'),
 				_1: {
 					ctor: '::',
 					_0: _elm_lang$html$Html_Events$onMouseDown(
@@ -8360,7 +8360,7 @@ var _kosmoskatten$draw_it$Image$renderImage = function (_p1) {
 		_elm_lang$html$Html$table,
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('board'),
+			_0: _elm_lang$html$Html_Attributes$class('image'),
 			_1: {
 				ctor: '::',
 				_0: _elm_lang$html$Html_Events$onMouseUp(_kosmoskatten$draw_it$Types$MouseUp),

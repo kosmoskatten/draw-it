@@ -76,7 +76,7 @@ dimensions =
 renderImage : Image -> Html Msg
 renderImage (Image rows) =
     table
-        [ A.class "board"
+        [ A.class "image"
         , E.onMouseUp MouseUp
         , E.onMouseLeave MouseUp
         ]
@@ -93,14 +93,14 @@ renderPixel : Int -> Int -> Int -> Html Msg
 renderPixel row col value =
     if value > 0 then
         td
-            [ A.class "square active"
+            [ A.class "pixel set"
             , E.onMouseDown <| MouseDown row col
             , E.onMouseEnter <| MouseEnter row col
             ]
             []
     else
         td
-            [ A.class "square"
+            [ A.class "pixel unset"
             , E.onMouseDown <| MouseDown row col
             , E.onMouseEnter <| MouseEnter row col
             ]
