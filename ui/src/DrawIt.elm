@@ -14,6 +14,7 @@ import Array exposing (Array, repeat)
 import Html exposing (..)
 import Html.Attributes as A
 import Html.Events as E
+import Html.Lazy exposing (lazy)
 
 
 type alias Model =
@@ -23,7 +24,8 @@ type alias Model =
 
 
 type Msg
-    = MouseDownOn Int Int
+    = MouseDown Int Int
+    | MouseEnter Int Int
     | MouseUp
     | NoOp
 
@@ -49,7 +51,7 @@ init =
 view : Model -> Html Msg
 view model =
     div []
-        [ renderBoard model.board
+        [ lazy renderBoard model.board
         , text <|
             if model.mouseMode == Active then
                 "Mouse: Active"
@@ -61,7 +63,7 @@ view model =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        MouseDownOn row col ->
+        MouseDown row col ->
             if isSet model.board row col then
                 ( { model | mouseMode = Active }, Cmd.none )
             else
@@ -71,6 +73,12 @@ update msg model =
                   }
                 , Cmd.none
                 )
+
+        MouseEnter row col ->
+            if model.mouseMode == Active && not (isSet model.board row col) then
+                ( { model | board = setSquare model.board row col }, Cmd.none )
+            else
+                ( model, Cmd.none )
 
         MouseUp ->
             ( { model | mouseMode = Inactive }, Cmd.none )
@@ -86,7 +94,13 @@ subscriptions model =
 
 renderBoard : Board -> Html Msg
 renderBoard (Board rows) =
-    table [ A.class "board" ] <| transformIndex renderRow rows
+    table
+        [ A.class "board"
+        , E.onMouseUp MouseUp
+        , E.onMouseLeave MouseUp
+        ]
+    <|
+        transformIndex renderRow rows
 
 
 renderRow : Int -> Array Bool -> Html Msg
@@ -97,9 +111,19 @@ renderRow row values =
 renderSquare : Int -> Int -> Bool -> Html Msg
 renderSquare row col isSet =
     if isSet then
-        td [ A.class "square active", E.onMouseDown <| MouseDownOn row col ] []
+        td
+            [ A.class "square active"
+            , E.onMouseDown <| MouseDown row col
+            , E.onMouseEnter <| MouseEnter row col
+            ]
+            []
     else
-        td [ A.class "square", E.onMouseDown <| MouseDownOn row col ] []
+        td
+            [ A.class "square"
+            , E.onMouseDown <| MouseDown row col
+            , E.onMouseEnter <| MouseEnter row col
+            ]
+            []
 
 
 transformIndex : (Int -> a -> b) -> Array a -> List b
@@ -144,4 +168,4 @@ isSet (Board rows) row col =
 
 dimensions : Int
 dimensions =
-    27
+    20

@@ -8256,7 +8256,11 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
-var _kosmoskatten$draw_it$DrawIt$dimensions = 27;
+var _elm_lang$html$Html_Lazy$lazy3 = _elm_lang$virtual_dom$VirtualDom$lazy3;
+var _elm_lang$html$Html_Lazy$lazy2 = _elm_lang$virtual_dom$VirtualDom$lazy2;
+var _elm_lang$html$Html_Lazy$lazy = _elm_lang$virtual_dom$VirtualDom$lazy;
+
+var _kosmoskatten$draw_it$DrawIt$dimensions = 20;
 var _kosmoskatten$draw_it$DrawIt$isSet = F3(
 	function (_p0, row, col) {
 		var _p1 = _p0;
@@ -8312,9 +8316,13 @@ var _kosmoskatten$draw_it$DrawIt$Model = F2(
 	});
 var _kosmoskatten$draw_it$DrawIt$NoOp = {ctor: 'NoOp'};
 var _kosmoskatten$draw_it$DrawIt$MouseUp = {ctor: 'MouseUp'};
-var _kosmoskatten$draw_it$DrawIt$MouseDownOn = F2(
+var _kosmoskatten$draw_it$DrawIt$MouseEnter = F2(
 	function (a, b) {
-		return {ctor: 'MouseDownOn', _0: a, _1: b};
+		return {ctor: 'MouseEnter', _0: a, _1: b};
+	});
+var _kosmoskatten$draw_it$DrawIt$MouseDown = F2(
+	function (a, b) {
+		return {ctor: 'MouseDown', _0: a, _1: b};
 	});
 var _kosmoskatten$draw_it$DrawIt$renderSquare = F3(
 	function (row, col, isSet) {
@@ -8326,8 +8334,13 @@ var _kosmoskatten$draw_it$DrawIt$renderSquare = F3(
 				_1: {
 					ctor: '::',
 					_0: _elm_lang$html$Html_Events$onMouseDown(
-						A2(_kosmoskatten$draw_it$DrawIt$MouseDownOn, row, col)),
-					_1: {ctor: '[]'}
+						A2(_kosmoskatten$draw_it$DrawIt$MouseDown, row, col)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Events$onMouseEnter(
+							A2(_kosmoskatten$draw_it$DrawIt$MouseEnter, row, col)),
+						_1: {ctor: '[]'}
+					}
 				}
 			},
 			{ctor: '[]'}) : A2(
@@ -8338,8 +8351,13 @@ var _kosmoskatten$draw_it$DrawIt$renderSquare = F3(
 				_1: {
 					ctor: '::',
 					_0: _elm_lang$html$Html_Events$onMouseDown(
-						A2(_kosmoskatten$draw_it$DrawIt$MouseDownOn, row, col)),
-					_1: {ctor: '[]'}
+						A2(_kosmoskatten$draw_it$DrawIt$MouseDown, row, col)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Events$onMouseEnter(
+							A2(_kosmoskatten$draw_it$DrawIt$MouseEnter, row, col)),
+						_1: {ctor: '[]'}
+					}
 				}
 			},
 			{ctor: '[]'});
@@ -8361,7 +8379,15 @@ var _kosmoskatten$draw_it$DrawIt$renderBoard = function (_p4) {
 		{
 			ctor: '::',
 			_0: _elm_lang$html$Html_Attributes$class('board'),
-			_1: {ctor: '[]'}
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Events$onMouseUp(_kosmoskatten$draw_it$DrawIt$MouseUp),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Events$onMouseLeave(_kosmoskatten$draw_it$DrawIt$MouseUp),
+					_1: {ctor: '[]'}
+				}
+			}
 		},
 		A2(_kosmoskatten$draw_it$DrawIt$transformIndex, _kosmoskatten$draw_it$DrawIt$renderRow, _p5._0));
 };
@@ -8407,7 +8433,7 @@ var _kosmoskatten$draw_it$DrawIt$view = function (model) {
 		{ctor: '[]'},
 		{
 			ctor: '::',
-			_0: _kosmoskatten$draw_it$DrawIt$renderBoard(model.board),
+			_0: A2(_elm_lang$html$Html_Lazy$lazy, _kosmoskatten$draw_it$DrawIt$renderBoard, model.board),
 			_1: {
 				ctor: '::',
 				_0: _elm_lang$html$Html$text(
@@ -8420,7 +8446,7 @@ var _kosmoskatten$draw_it$DrawIt$update = F2(
 	function (msg, model) {
 		var _p10 = msg;
 		switch (_p10.ctor) {
-			case 'MouseDownOn':
+			case 'MouseDown':
 				var _p12 = _p10._0;
 				var _p11 = _p10._1;
 				return A3(_kosmoskatten$draw_it$DrawIt$isSet, model.board, _p12, _p11) ? {
@@ -8439,6 +8465,18 @@ var _kosmoskatten$draw_it$DrawIt$update = F2(
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
+			case 'MouseEnter':
+				var _p14 = _p10._0;
+				var _p13 = _p10._1;
+				return (_elm_lang$core$Native_Utils.eq(model.mouseMode, _kosmoskatten$draw_it$DrawIt$Active) && (!A3(_kosmoskatten$draw_it$DrawIt$isSet, model.board, _p14, _p13))) ? {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							board: A3(_kosmoskatten$draw_it$DrawIt$setSquare, model.board, _p14, _p13)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				} : {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 			case 'MouseUp':
 				return {
 					ctor: '_Tuple2',
